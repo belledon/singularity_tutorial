@@ -71,7 +71,7 @@ The path `<container folder>` leads to the path where you would like to keep you
 ### Babies and Bootstraps
 
 
-![alt text][baby_boots]
+![alt text][babyboots]
 
 Now that we have `singularity` installed in our system (you can test this by running `singularity --version`), we can now get started with making our first container.
 
@@ -254,7 +254,7 @@ Shell can be a great tool to explore your container and has allot of valid uses,
 ### x2go to hell and back
 
 
-[baby_boots]: https://github.com/belledon/singularity_tutorial/edit/master/images/babies_and_bootstraps.png "Zoom Zoom!"
+[babyboots]:https://github.com/belledon/singularity_tutorial/edit/master/images/babies_and_bootstraps.png "Zoom Zoom!"
 
 
 
