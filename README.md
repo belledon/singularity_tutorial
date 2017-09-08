@@ -69,6 +69,10 @@ For Mac users, the **VM** `vagrant` is required.  I would recommend `Option 1` t
 The path `<container folder>` leads to the path where you would like to keep your containers. This edit allows `vagrant` to bind that path to `/vagrant_data` with the VM.
 
 ### Babies and Bootstraps
+
+
+![alt text][baby_boots]
+
 Now that we have `singularity` installed in our system (you can test this by running `singularity --version`), we can now get started with making our first container.
 
 This is were we should go back to the first commandment:
@@ -250,7 +254,7 @@ Shell can be a great tool to explore your container and has allot of valid uses,
 ### x2go to hell and back
 
 
-
+[baby_boots]: https://github.com/belledon/singularity_tutorial/edit/master/images/babies_and_bootstraps.png "Zoom Zoom!"
 
 
 
