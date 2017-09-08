@@ -28,13 +28,13 @@ For the sake of this tutorial (equivalent to your parents saying "because I said
 
 Now back to the difference between **VMs** and **containers**. A **VM** essentially replicates all three layers, hence the *virtual*. The benifit of this is that the **VM** need not worry about the particulars of the host's kernel. This is useful when trying do perform some cross-platform computing (say ubuntu on windows). However, there is a major drawback: virtualization of all three layers significantly taxes your host. You can imagine this would not be optimal on a cluster, were you could have an army of **VMs** eating up resources. 
 
-Containers do not have this amount of overhead (or why would we be using one?). They do so by merely extending the File System by bypassing the OS and talking to the kernel directly. However, to do this, it must assume that the host is using a particular kernel. Thus most containers rely on a linux kernel (because thats what cool kids use). So really most containers allow you to have any particular flavor of linux on another flavor of linux for minimal cost. 
+Containers do not have this amount of overhead (or why would we be using one?). They do so by merely extending the File System by bypassing the OS and talking to the kernel directly. However, to do this, it must assume that the host is using a particular kernel. Thus most containers rely on a linux kernel (because thats what cool kids use). So really most containers allow you to have any particular flavor of linux on another flavor of linux for minimal cost (like those strange people who like pinapple on their pizza). 
 
 > Don't drink too much koolaid:
->  You have to have an extra setup of you want to either run Singularity on a non-Linux machine (including Mac). This requires 
+>  You have to have an extra setup of you want to either run Singularity on a non-Linux machine (including Mac). This requires a **VM**.
 
 Enter the new kid: Singularity
-Why is it special? Their website does a better job of explaining it than I do but you're obviously lazy by coming here so...
+Why is it special? Their website does a better job of explaining it than I do but you're obviously not one for reading manuals.
 
 1. Singulary prevents escalation
 
@@ -55,7 +55,7 @@ For the rest of this tutorial I will need you to hold the following commandments
 1. When you are modifying a container, you must treat it as a computer independent of your host
 2. When you are executing programs via the container you must treat it as an application in your host
 
-Don't worry if that doesn't make sense. Hopefully by going through the paces these principles will become more comfortable
+Don't worry if that doesn't make sense. Hopefully, by going through the paces, these principles will become more comfortable
 
 ## Your first container
 
@@ -63,7 +63,7 @@ Don't worry if that doesn't make sense. Hopefully by going through the paces the
 [http://singularity.lbl.gov/]:sing_website
 Follow the installation instructions from their [website](sing_website). I would strongly recommend installing from source since there are frequent updates.
 
-For Mac users, the **VM** `vagrant` is required. I would recommend `Option 1` that uses the Singularity team's virtual box.  However, I would make one edit in the `VagrantFile`:
+For Mac users, the **VM** `vagrant` is required.  I would recommend `Option 1` that uses the Singularity team's virtual box.  However, I would make one edit in the `VagrantFile`:
 > Un-comment line 40 and include `config.vm.synced_folder "<container folder>", "/vagrant_data"`
 
 The path `<container folder>` leads to the path where you would like to keep your containers. This edit allows `vagrant` to bind that path to `/vagrant_data` with the VM.
@@ -79,30 +79,31 @@ Yes, this means that whatever drivers, libraries, nuclear launch codes you have 
 With the command `sudo singularity create <name>.img`, we generate an empty image.
 
 ```
-$ sudo singularity create foo.img
+$ sudo singularity create baby.img
 Initializing Singularity image subsystem
-Opening image file: foo.img
+Opening image file: baby.img
 Creating 768MiB image
 Binding image to loop
 Creating file system within image
-Image is done: foo.img
+Image is done: baby.img
 ```
 
 A usefull derivative is `sudo singularity create -s <size in MB> <name.img>` which allows the user to specify the size of the image (default is `768MB`)
 
 ```
-$ sudo singularity create -s 1024 foo.img
+$ sudo singularity create -s 1024 baby.img
 Initializing Singularity image subsystem
-Opening image file: foo.img
+Opening image file: baby.img
 Creating 1024MiB image
 Binding image to loop
 Creating file system within image
-Image is done: foo.img
+Image is done: baby.img
 ```
-We have now created a blank image, a canvas that we will pour our computational soul into. To do that we will need a boostrap file (also known as a singularity or definition file). This file is a simple bash file that describes the operating system, installed libraries, and persistent environmental variables. Below is an example cribbed from the singularity [docs](http://singularity.lbl.gov/quickstart)
+We have now created a blank image, a canvas that we will pour our computational soul into and totally not be dissapointed when it doesn't like the same sports team we do. To do that we will need a boostrap file (also known as a singularity or definition file). This file is a simple bash file that describes the operating system, installed libraries, and persistent environmental variables. Below is an example cribbed from the singularity [docs](http://singularity.lbl.gov/quickstart) that is unorigonally called `Singularity`.
 
-first_boostrap
+
 ```
+# Singularity
 Bootstrap: docker
 From: ubuntu:latest
 
@@ -130,7 +131,8 @@ mkdir /data
 echo "Greetings, parental unit"
 ```
 
->Before we get into the details, I would like to emphasize that creating a new container is an iterative process. One goal is to try an jam as much of the setup as possible into the definition file. This not only goes in line with Singularity's principle on reproducability but can also save you **allot** of time in case you need to remake your container (which you will). So as you mold you computational child, remember to update the definition file regularly.
+
+>Before we get into the details, I would like to emphasize that creating a new container is an iterative process as you may not know what all of the dependencies are when first starting out. Try an jam as much of the setup as possible into the definition file. This not only goes in line with Singularity's principle on reproducability but can also save you **allot** of time in case you need to remake your container (which you will). So as you mold you computational child, remember to update the definition file regularly.
 
 #### Bootstrap mode and source
 Time to break it down, in order of importance rather than appearance in the boostrap file. The first section is the header:
@@ -140,7 +142,7 @@ From: ubuntu:latest
 ```
 The `Bootstrap` field determines the mode. For the most part you will probably be using :
 1. `debootstrap`:
- This tells singularity that you are building from a mirror. For other linux flavors see the Singularity examples [page](https://github.com/singularityware/singularity/tree/master/examples) on their github repo. 
+ This tells singularity that you are building from a mirror on a debian host. For other linux flavors see the Singularity examples [page](https://github.com/singularityware/singularity/tree/master/examples) on their github repo. 
 
 2. `docker`:
     More on this in the next section but essentially it tells Singularity that you plan on useing an already-made Docker container.
@@ -176,9 +178,15 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/path_to_driver_libraries
 singularity run some_script.sh
 ```
 
-DON'T do it, that would be like not giving your child the ability to have long-term memory. If you know that you want a variable available in all of your future use cases, then just include it in the `%environment` section. "What if I don't know the path I want to add before boostraping?" you make ask. We will go over the hands on section of container setup in [Singularity Shell](#singularity-shell)
+DON'T do it, don't be bad parent. If you know that you want a variable available in all of your future use cases, then just include it in the `%environment` section. "What if I don't know the path I want to add before boostraping?" you make ask. We will go over the hands on section of container setup in [Singularity Shell](#singularity-shell) but just like additional dependencies, if you can, update your bootstrap file regularly. 
 
+#### The command
 
+Anxious to actually bootstrap your container? Me too. Here is the command
+```
+sudo singularity bootstrap baby.img Singularity
+```
+We require `sudo` because `bootstrap` modifies the container. 
 
 ### Docking to Strangers on the internet
 
@@ -199,6 +207,39 @@ Interacting with people on the internet possibly re-defined humanity. Every pote
 >Containers on Singularity hub aren't much safer that Docker hub in terms of efficacy. However, because of the inherent security differences between the two, Singularity containers are less likely to leave your back door unlocked so Michael Myers can't invite himself over with chainsaw.
 
 ### Singularity Shell
+Now that we have at least the core of the container built (via bootstrap) we can start interacting with our child. But like every proper parent-child relationship we must establish some ground rules and pray that they don't figure out that we don't know what we're doing.
+
+To begin we type the following command
+```
+sudo singularity shell -w baby.img
+```
+
+> Don't worry about the random `-w` flag. This means that we plan to modify the container in our shell session. Also don't think about why we require this flag and `sudo` at the same time. Patience young padiwan. 
+
+Since we are operating under commandment 1, we are not suprised that the only files visible when shelled are files inside of the container. To the unfortunately curious, this is because Singularity prevents default access to the rest of your host's file system in case you decide to delete `/usr/bin`.
+
+Now that we're in the matrix, we can do anything. No actually.. Since we `sudo`-ed into the container, Singularity essentially prepends `sudo` to every user command. Bet you never though you'd use `sudo echo` before huh?
+
+```
+echo $POWERLEVEL
+9001
+```
+
+You can also do useful things like:
+``` 
+apt-get install gedit
+```
+It will take some getting used to not having to type `sudo` everytime. If you use any custom libraries that rely on a bash script which uses `sudo` you will have to fix those commands. Why? Because of this (in case you haven't already tried).
+
+```
+sudo echo $ANSWERTOLIFE
+bash: sudo: command not found
+```
+
+Shell can be a great tool to explore your container and has allot of valid uses, especially as having your own personal linux machine on the cluster. But here's a big but! Do not think of this as the normal use case. For everday use (submitting jobs on the HPC) you should follow commandment 2
+
+>  When you are executing programs via the container you must treat it as an application in your host
+
 ### Run Singularity, Run!
 
 
