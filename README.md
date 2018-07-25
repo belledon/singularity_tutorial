@@ -1,8 +1,10 @@
 # Learn you a Singularity
 
-Looking for independence? Tired of waiting for your hpc admins to installed the latestest packages that were never meant to exist on `CentOS`? Or did they force you to come here so they could worry about other things like ...
+Looking for independence? Tired of waiting for your hpc admins to installed the latestest packages that were never meant to exist on `CentOS`? 
+Or did they force you to come here so they could worry about matching the colors of the wires in the IO switch. 
 
-Well you've come to the right place (maybe). This tutorial assumes you have minimal knowledge of HPCs or containers and you just want to treat your cluster as a much more expensive (unix) PC. 
+Well you've come to the right place (maybe). 
+This tutorial assumes you have minimal knowledge of HPCs or containers and you just want to treat your cluster as a much more expensive (unix) PC. 
 
 Special thanks to the Singularity team who gave birth to this amazing creation.
 
@@ -10,19 +12,26 @@ Special thanks to the Singularity team who gave birth to this amazing creation.
 
 First we'll need to lay down some common ground. If you think you know everything feel free to skip this section, nerd.
 
-The reason you need to use a **container** is that your cluster may use a different operating system or does not want to deal with conflicting libraries (say needing `libfoo.10` vs `libfool.13`). A **container** is one of two popular methods for extending **environments**. An **environment** is a collection of libraries and binaries needed to run a particular application. The other popular method of extending an **environment** is a **virtual machine**(**VM**). Before I go into the differences, I would like to elaborate what a computer is. 
+The reason you need to use a **container** is that your cluster may use a different operating system or does not want to deal with conflicting libraries (say needing `libfoo.10` vs `libfool.13`). 
+A **container** is one of two popular methods for extending **environments**. 
+An **environment** is a collection of libraries and binaries needed to run a particular application. 
+The other popular method of extending an **environment** is a **virtual machine**(**VM**). 
+Before I go into the differences, I would like to elaborate what a computer is. 
 
 ### The cake is not a lie
-For the sake of this tutorial (equivalent to your parents saying "because I said so"), I will define a computer as comprising of three layers: 
+For the sake of this tutorial (equivalent to your parents saying "because I said so"), 
+I will define a computer as comprising of three layers: 
+
  1. File System
      Contains the ever precious **environment** that brought you here in the first place
 
  2. Operating System (OS)
-    Manages housekeeping and access to applications in the File System
+    Manages housekeeping, resource allocation, and access to the objects in the File System
 
  3. Kernel
-    Mediates between the OS and the systems resources: CPU, IO, ...
-    
+    Mediates between the OS and the systems hardware: CPU, IO, ...\\
+
+![env_diagram]
     
 ### Are we human or are we Singularity?
 
@@ -254,7 +263,9 @@ Shell can be a great tool to explore your container and has allot of valid uses,
 ### x2go to hell and back
 
 
-[babyboots]:https://github.com/belledon/singularity_tutorial/edit/master/images/babies_and_bootstraps.png "Zoom Zoom!"
+[babyboots]:/images/babies_and_bootstraps.png "Zoom Zoom!"
+
+[env_diagram]:/images/env_diagram.png "Beep Boop"
 
 
 
